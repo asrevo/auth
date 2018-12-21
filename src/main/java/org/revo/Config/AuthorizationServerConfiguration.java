@@ -49,7 +49,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .authorizedGrantTypes("authorization_code")
                 .scopes("read", "write")
                 .autoApprove("read")
-                .redirectUris("https://asrevo.cfapps.io")
+                .redirectUris("https://asrevo.cfapps.io/login")
                 .secret(encoder.encode("revo"));
     }
 
