@@ -11,11 +11,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.*;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import java.security.KeyPair;
 import java.util.Arrays;
 
 /**
@@ -30,8 +32,16 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     private AuthenticationManager authenticationManager;
     @Autowired
     private PasswordEncoder encoder;
-    @Autowired
-    private KeyPair keyPair;
+
+
+//    @Bean
+//    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+//        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//        KeyPair keyPair = new KeyStoreKeyFactory(new ClassPathResource("keystore.jks"), "foobar".toCharArray())
+//                .getKeyPair("test");
+//        converter.setKeyPair(keyPair);
+//        return converter;
+//    }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -39,7 +49,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .authorizedGrantTypes("authorization_code")
                 .scopes("read", "write")
                 .autoApprove("read")
-                .redirectUris("https://asrevo.cfapps.io/login")
                 .secret(encoder.encode("revo"));
     }
 
@@ -67,8 +76,9 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
         endpoints
                 .tokenStore(tokenStore).authenticationManager(authenticationManager)
+                .tokenEnhancer(tokenEnhancerChain)
                 .accessTokenConverter(accessTokenConverter())
-                .tokenStore(tokenStore());
+        ;
     }
 
     @Bean
@@ -81,26 +91,19 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     }
 
     @Bean
-    public TokenEnhancer tokenEnhancer() {
-        return new CustomTokenEnhancer();
-    }
-
-
-    @Bean
     public TokenStore tokenStore() {
         return new JwtTokenStore(accessTokenConverter());
     }
 
-
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setKeyPair(this.keyPair);
-
-        DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
-        accessTokenConverter.setUserTokenConverter(new SubjectAttributeUserTokenConverter());
-        converter.setAccessTokenConverter(accessTokenConverter);
-
+        converter.setSigningKey("123");
         return converter;
+    }
+
+    @Bean
+    public TokenEnhancer tokenEnhancer() {
+        return new CustomTokenEnhancer();
     }
 }
