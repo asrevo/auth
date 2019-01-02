@@ -61,8 +61,7 @@ public class MainController {
     @GetMapping(value = "/user")
     @ResponseBody
     public Object getExtraInfo(OAuth2Authentication auth) {
-        final OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) auth.getDetails();
-        return tokenStore.readAccessToken(details.getTokenValue()).getAdditionalInformation().get("user");
+        return tokenStore.readAccessToken(((OAuth2AuthenticationDetails) auth.getDetails()).getTokenValue()).getAdditionalInformation();
     }
 
     @Autowired

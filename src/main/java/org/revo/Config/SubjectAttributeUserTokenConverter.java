@@ -11,7 +11,8 @@ class SubjectAttributeUserTokenConverter extends DefaultUserAuthenticationConver
     @Override
     public Map<String, ?> convertUserAuthentication(Authentication authentication) {
         Map<String, Object> response = new LinkedHashMap<String, Object>();
-        response.put("sub", authentication.getName());
+        response.put("user", authentication.getPrincipal());
+        response.put(USERNAME, authentication.getName());
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }
