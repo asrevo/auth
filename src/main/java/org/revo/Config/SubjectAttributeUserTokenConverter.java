@@ -10,7 +10,7 @@ import java.util.Map;
 class SubjectAttributeUserTokenConverter extends DefaultUserAuthenticationConverter {
     @Override
     public Map<String, ?> convertUserAuthentication(Authentication authentication) {
-        Map<String, Object> response = new LinkedHashMap<String, Object>();
+        Map<String, Object> response = new LinkedHashMap<>();
         response.put("user", authentication.getPrincipal());
         response.put(USERNAME, authentication.getName());
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
