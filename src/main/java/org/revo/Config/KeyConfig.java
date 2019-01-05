@@ -10,7 +10,7 @@ import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 
 @Configuration
-class KeyConfig {
+public class KeyConfig {
     @Bean
     KeyPair keyPair() {
         try {
