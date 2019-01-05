@@ -47,7 +47,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .scopes("read", "write")
                 .autoApprove("read")
                 .redirectUris("https://asrevo.cfapps.io/login/oauth2/code/login-client")
-                .secret(encoder.encode("revo"));
+                .secret(encoder.encode("revo")).and()
+                .withClient("revo1")
+                .authorizedGrantTypes("authorization_code")
+                .scopes("read", "write")
+                .autoApprove("read")
+                .redirectUris("http://localhost:8080/oauth2/authorization/login-client")
+                .secret(encoder.encode("revo1"));
 
     }
 
