@@ -52,7 +52,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .authorizedGrantTypes("authorization_code")
                 .scopes("read", "write")
                 .autoApprove("read")
-                .redirectUris("http://localhost:8080/oauth2/authorization/login-client")
+                .redirectUris("http://localhost:8080/login/oauth2/authorization/login-client")
                 .secret(encoder.encode("revo1"));
 
     }
