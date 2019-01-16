@@ -19,8 +19,6 @@ public class JwkSetEndpoint {
     @GetMapping("/.well-known/jwks.json")
     @ResponseBody
     public JSONObject getKey() {
-        RSAPublicKey publicKey = (RSAPublicKey) this.keyPair.getPublic();
-        RSAKey key = new RSAKey.Builder(publicKey).build();
-        return new JWKSet(key).toJSONObject();
+        return new JWKSet(new RSAKey.Builder((RSAPublicKey) this.keyPair.getPublic()).build()).toJSONObject();
     }
 }
